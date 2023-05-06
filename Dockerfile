@@ -6,7 +6,7 @@ WORKDIR /
 
 # Install System Packages
 RUN apt-get update
-RUN apt-get install ffmpeg
+RUN apt-get install ffmpeg -y
 
 # Install Python dependencies (Worker Template)
 COPY builder/requirements.txt /requirements.txt
