@@ -4,6 +4,9 @@ SHELL ["/bin/bash", "-c"]
 
 WORKDIR /
 
+# Install System Packages
+RUN apt-get install ffmpeg
+
 # Install Python dependencies (Worker Template)
 COPY builder/requirements.txt /requirements.txt
 RUN pip install --upgrade pip && \
@@ -12,4 +15,4 @@ RUN pip install --upgrade pip && \
 
 ADD src .
 
-CMD [ "python", "-u", "/handler.py" ]
+CMD [ "python", "-u", "/rp_handler.py" ]
