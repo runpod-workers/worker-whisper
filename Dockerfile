@@ -5,6 +5,7 @@ SHELL ["/bin/bash", "-c"]
 WORKDIR /
 
 # Install System Packages
+RUN apt-get update
 RUN apt-get install ffmpeg
 
 # Install Python dependencies (Worker Template)
