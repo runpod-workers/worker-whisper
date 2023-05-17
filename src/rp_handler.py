@@ -4,7 +4,8 @@ import os
 import predict
 
 import runpod
-from runpod.serverless.utils import download_files_from_urls, validate, rp_cleanup
+from runpod.serverless.utils.rp_validator import validate
+from runpod.serverless.utils import download_files_from_urls, rp_cleanup
 
 from rp_schema import INPUT_VALIDATIONS
 
