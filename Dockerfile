@@ -14,6 +14,12 @@ RUN pip install --upgrade pip && \
     pip install -r /requirements.txt && \
     rm /requirements.txt
 
+# Download Models
+COPY builder/download_models.sh /download_models.sh
+RUN chmod +x /download_models.sh && \
+    /download_models.sh
+RUN rm /download_models.sh
+
 ADD src .
 
 CMD [ "python", "-u", "/rp_handler.py" ]
