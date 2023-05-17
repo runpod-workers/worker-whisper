@@ -7,29 +7,24 @@
 🚀 | A simple worker that can be used as a starting point to build your own custom RunPod Endpoint API worker.
 </div>
 
-## 📖 | Getting Started
+## Model Inputs
 
-1. Clone this repository.
-2. (Optional) Add DockerHub credentials to GitHub Secrets.
-3. Add your code to the `src` directory.
-4. Update the `handler.py` file to load models and process requests.
-5. Add any dependencies to the `requirements.txt` file.
-6. Add any other build time scripts to the`builder` directory, for example, downloading models.
-7. Update the `Dockerfile` to include any additional dependencies.
-
-### CI/CD
-
-This repository is setup to automatically build and push a docker image to the GitHub Container Registry. You will need to add the following to the GitHub Secrets for this repository to enable this functionality:
-
-- `DOCKERHUB_USERNAME` | Your DockerHub username for logging in.
-- `DOCKERHUB_TOKEN` | Your DockerHub token for logging in.
-- `DOCKERHUB_REPO` | The name of the repository you want to push to.
-- `DOCKERHUB_IMG` | The name of the image you want to push to.
-
-The `CD-docker_dev.yml` file will build the image and push it to the `dev` tag, while the `CD-docker_release.yml` file will build the image on releases and tag it with the release version.
-
-## Best Practices
-
-Models should be part of your docker image, this can be accomplished by either copying them into the image or downloading them during the build process.
-
-If using the input validation utility from the runpod python package, create a `schemas` python file where you can define the schemas, then import that file into your `handler.py` file.
+| Input                               | Type  | Description                                                                                                 |
+|-------------------------------------|-------|-------------------------------------------------------------------------------------------------------------|
+| `audio`                             | Path  | Audio file                                                                                                  |
+| `model`                             | str   | Choose a Whisper model. Choices: "tiny", "base", "small", "medium", "large-v1", "large-v2". Default: "base" |
+| `transcription`                     | str   | Choose the format for the transcription. Choices: "plain text", "srt", "vtt". Default: "plain text"         |
+| `translate`                         | bool  | Translate the text to English when set to True. Default: False                                              |
+| `language`                          | str   | Language spoken in the audio, specify None to perform language detection. Default: None                     |
+| `temperature`                       | float | Temperature to use for sampling. Default: 0                                                                 |
+| `best_of`                           | int   | Number of candidates when sampling with non-zero temperature. Default: 5                                    |
+| `beam_size`                         | int   | Number of beams in beam search, only applicable when temperature is zero. Default: 5                        |
+| `patience`                          | float | Optional patience value to use in beam decoding. Default: None                                              |
+| `length_penalty`                    | float | Optional token length penalty coefficient (alpha). Default: None                                            |
+| `suppress_tokens`                   | str   | Comma-separated list of token ids to suppress during sampling. Default: "-1"                                |
+| `initial_prompt`                    | str   | Optional text to provide as a prompt for the first window. Default: None                                    |
+| `condition_on_previous_text`        | bool  | If True, provide the previous output of the model as a prompt for the next window. Default: True            |
+| `temperature_increment_on_fallback` | float | Temperature to increase when falling back when the decoding fails. Default: 0.2                             |
+| `compression_ratio_threshold`       | float | If the gzip compression ratio is higher than this value, treat the decoding as failed. Default: 2.4         |
+| `logprob_threshold`                 | float | If the average log probability is lower than this value, treat the decoding as failed. Default: -1.0        |
+| `no_speech_threshold`               | float | If the probability of the token is higher than this value, consider the segment as silence. Default: 0.6    |
