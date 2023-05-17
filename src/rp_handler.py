@@ -4,8 +4,7 @@ import os
 import predict
 
 import runpod
-from runpod.serverless.utils import download, validator, rp_cleanup
-
+from runpod.serverless.utils import download_files_from_urls, validate, rp_cleanup
 
 from rp_schema import INPUT_VALIDATIONS
 
@@ -34,16 +33,16 @@ def run(job):
     job_input['no_speech_threshold'] = 0.6
 
     # Input validation
-    input_errors = validator.validate(job_input, INPUT_VALIDATIONS)
+    validated_input = validate(job_input, INPUT_VALIDATIONS)
 
-    if input_errors:
-        return {"error": input_errors}
+    if 'errors' in validated_input:
+        return {"error": validated_input['errors']}
 
-    job_input['audio'] = download.download_input_objects([job_input['audio']])[0]
+    job_input['audio'] = download_files_from_urls(job['id'], [job_input['audio']])[0]
 
     whisper_results = MODEL.predict(
         audio=job_input["audio"],
-        model=job_input.get("model", 'base'),
+        model_name=job_input.get("model", 'base'),
         transcription=job_input.get('transcription', 'plain_text'),
         translate=job_input.get('translate', False),
         language=job_input.get('language', None),
@@ -63,12 +62,7 @@ def run(job):
 
     rp_cleanup.clean(['input_objects'])
 
-    return {
-        'segments': whisper_results.segments,
-        'detected_language': whisper_results.detected_language,
-        'transcription': whisper_results.transcription,
-        'translation': whisper_results.translation
-    }
+    return whisper_results
 
 
 runpod.serverless.start({"handler": run})
