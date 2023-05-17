@@ -4,8 +4,13 @@ SHELL ["/bin/bash", "-c"]
 
 WORKDIR /
 
+# Update and upgrade the system packages (Worker Template)
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # Install System Packages
-RUN apt-get update
 RUN apt-get install ffmpeg -y
 
 # Download Models
@@ -21,5 +26,10 @@ RUN pip install --upgrade pip && \
     rm /requirements.txt
 
 ADD src .
+
+# Cleanup section (Worker Template)
+RUN apt-get autoremove -y && \
+    apt-get clean -y && \
+    rm -rf /var/lib/apt/lists/*
 
 CMD [ "python", "-u", "/rp_handler.py" ]
