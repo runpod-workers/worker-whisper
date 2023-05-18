@@ -1,10 +1,9 @@
 <div align="center">
 
-<h1>Template | Worker</h1>
+<h1>Whisper | Worker</h1>
 
 [![Docker Image](https://github.com/runpod-workers/worker-template/actions/workflows/CD-docker_dev.yml/badge.svg)](https://github.com/runpod-workers/worker-template/actions/workflows/CD-docker_dev.yml)
 
-🚀 | A simple worker that can be used as a starting point to build your own custom RunPod Endpoint API worker.
 </div>
 
 ## Model Inputs
@@ -28,3 +27,15 @@
 | `compression_ratio_threshold`       | float | If the gzip compression ratio is higher than this value, treat the decoding as failed. Default: 2.4         |
 | `logprob_threshold`                 | float | If the average log probability is lower than this value, treat the decoding as failed. Default: -1.0        |
 | `no_speech_threshold`               | float | If the probability of the token is higher than this value, consider the segment as silence. Default: 0.6    |
+
+## Test Inputs
+
+The following inputs can be used for testing the model:
+
+```json
+{
+    "input": {
+        "audio": "https://github.com/runpod-workers/sample-inputs/raw/main/audio/gettysburg.wav"
+    }
+}
+```
