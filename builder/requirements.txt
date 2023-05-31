@@ -1,7 +1,7 @@
 # Required Python packages get listed here, one per line.
 # Reccomended to lock the version number to avoid unexpected changes.
 
-runpod==0.9.8
+runpod==0.9.10
 tqdm==4.64.1
 torch==1.13.0
 torchaudio==0.13.0
