@@ -6,28 +6,24 @@ WORKDIR /
 
 # Update and upgrade the system packages (Worker Template)
 RUN apt-get update && \
-    apt-get upgrade -y
-
-# Install System Packages
-RUN apt-get install ffmpeg -y
-
-# Download Models
-COPY builder/download_models.sh /download_models.sh
-RUN chmod +x /download_models.sh && \
-    /download_models.sh
-RUN rm /download_models.sh
+    apt-get install -y --no-install-recommends ffmpeg && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies (Worker Template)
 COPY builder/requirements.txt /requirements.txt
-RUN pip install --upgrade pip && \
-    pip install -r /requirements.txt && \
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r /requirements.txt && \
     rm /requirements.txt
 
-ADD src .
+# Copy source code
+COPY src .
 
-# Cleanup section (Worker Template)
-RUN apt-get autoremove -y && \
-    apt-get clean -y && \
-    rm -rf /var/lib/apt/lists/*
+# Add test_input.json
+COPY test_input.json /
+
+# Download only the tiny model to save space (moved after copying code to leverage layer caching)
+RUN mkdir -p ./weights && \
+    wget -q https://openaipublic.azureedge.net/main/whisper/models/65147644a518d12f04e32d6f3b26facc3f8dd46e5390956a9424a650c0ce22b9/tiny.pt -P ./weights
 
 CMD [ "python", "-u", "/rp_handler.py" ]

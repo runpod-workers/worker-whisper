@@ -41,3 +41,9 @@ The following inputs can be used for testing the model:
     }
 }
 ```
+
+## Space Optimization
+
+To reduce the Docker image size and prevent "no space left on device" errors during builds, this worker only includes the "tiny" Whisper model by default. If you need additional models (base, small, medium, large), you can uncomment the relevant sections in the `builder/download_models.sh` script or modify the Dockerfile to download them at build time.
+
+The test_input.json file is configured to use the "tiny" model by default.

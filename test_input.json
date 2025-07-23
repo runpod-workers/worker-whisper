@@ -1,0 +1,6 @@
+{
+  "input": {
+    "audio_url": "https://github.com/openai/whisper/raw/main/tests/jfk.flac",
+    "model": "tiny"
+  }
+}
